@@ -1,0 +1,66 @@
+@startuml
+left to right direction
+skinparam shadowing false
+skinparam nodesep 30
+skinparam ranksep 90
+skinparam usecase {
+  BackgroundColor #FDFDFD
+  BorderColor #555555
+}
+
+actor Guest
+actor Parent
+actor Specialist
+actor Admin
+
+rectangle "SEN Support Platform" {
+  usecase "SC-01\nRegister, sign in,\nview own account" as SC01
+  usecase "SC-02\nCreate, view, edit\nchild profile" as SC02
+  usecase "SC-03\nPlan, view, update,\nor cancel support session" as SC03
+  usecase "SC-04\nCreate, read, edit,\ndelete diary entries" as SC04
+  usecase "SC-05\nInspect diary entry\nversion history" as SC05
+  usecase "SC-06\nView permitted\naudit events" as SC06
+  usecase "SC-07\nManage accounts, guardians,\nand specialist assignments" as SC07
+  usecase "SC-08\nExport permitted\nchild records" as SC08
+  usecase "SC-09\nDelete child data" as SC09
+}
+
+' слева: Guest и Parent
+Guest  --> SC01
+Parent --> SC01
+Parent --> SC02
+Parent --> SC03
+Parent --> SC04
+Parent --> SC05
+Parent --> SC06
+Parent --> SC07
+Parent --> SC08
+Parent --> SC09
+
+' справа: Specialist и Admin
+SC01 <-- Specialist
+SC02 <-- Specialist
+SC03 <-- Specialist
+SC04 <-- Specialist
+SC05 <-- Specialist
+
+SC01 <-- Admin
+SC02 <-- Admin
+SC06 <-- Admin
+SC07 <-- Admin
+SC08 <-- Admin
+SC09 <-- Admin
+
+legend bottom
+  **Notes**
+  SC-01: Guest is limited to public pages, registration and sign-in; no child data.
+  SC-02: Only Parent creates a profile. Parent and Specialist need a valid child relationship. Only the primary guardian edits. Admin sees metadata only.
+  SC-03: Within the actor's permissions and child relationship. Specialist updates or cancels assigned sessions only. Admin sees aggregates only (not a use case link).
+  SC-04: Parent creates shared entries only and reads shared entries. Specialist also reads specialists-only entries. Edit and delete apply to own entries only. Specialist cannot delete (edits are versioned, AUD-03).
+  SC-05: Only for diary entries the actor is authorized to read.
+  SC-06: Parent sees access events for a related child. Admin also sees the system-wide log. No diary content.
+  SC-07: Admin manages user accounts. Parent acts as primary guardian only: links guardians, creates and ends specialist assignments.
+  SC-08: Parent (primary guardian) exports profile, sessions and shared diary entries. Admin exports metadata only, on documented request, audited.
+  SC-09: Parent (primary guardian), or Admin on documented request, audited. Diary text is never displayed to Admin.
+endlegend
+@enduml

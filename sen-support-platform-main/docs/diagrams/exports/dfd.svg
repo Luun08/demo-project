@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">SEN Support Platform data-flow diagram</title>
+  <desc id="desc">User devices send untrusted input over HTTPS to the API. Authentication, authorization and relationship checks gate application services, which query PostgreSQL and write audit events.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#49617d"/></marker>
+    <style>
+      text{font-family:Segoe UI,Arial,sans-serif;fill:#183047}.zone{stroke-width:2;stroke-dasharray:8 6;rx:18}.node{fill:#fff;stroke:#49617d;stroke-width:2;rx:12}.data{fill:#fff;stroke:#476b57;stroke-width:2}.flow{fill:none;stroke:#49617d;stroke-width:2.5;marker-end:url(#arrow)}.label{font-size:15px;fill:#304b63}.head{font-size:21px;font-weight:700}.small{font-size:14px}
+    </style>
+  </defs>
+  <rect width="1280" height="720" fill="#f7f9fc"/>
+  <text x="40" y="42" class="head">SEN Support Platform — Data Flow &amp; Trust Boundaries</text>
+  <rect x="34" y="75" width="300" height="595" class="zone" fill="#eef5ff" stroke="#7392bb"/>
+  <text x="54" y="110" class="head">Untrusted zone</text><text x="54" y="134" class="small">User device / browser</text>
+  <rect x="82" y="177" width="204" height="54" class="node"/><text x="184" y="210" text-anchor="middle">Guest</text>
+  <rect x="82" y="251" width="204" height="54" class="node"/><text x="184" y="284" text-anchor="middle">Parent / guardian</text>
+  <rect x="82" y="325" width="204" height="54" class="node"/><text x="184" y="358" text-anchor="middle">Assigned specialist</text>
+  <rect x="82" y="437" width="204" height="72" class="node" fill="#e4efff"/><text x="184" y="468" text-anchor="middle">React browser client</text><text x="184" y="490" text-anchor="middle" class="small">All input is untrusted</text>
+  <path d="M184 231 V437" class="flow"/><path d="M184 305 V437" class="flow"/><path d="M184 379 V437" class="flow"/>
+
+  <rect x="374" y="75" width="160" height="595" class="zone" fill="#fff7e8" stroke="#d6aa55"/>
+  <text x="394" y="110" class="head">Transport</text><text x="394" y="134" class="small">Trust boundary</text>
+  <rect x="400" y="437" width="108" height="72" class="node" fill="#fff"/><text x="454" y="468" text-anchor="middle">HTTPS</text><text x="454" y="490" text-anchor="middle" class="small">TLS</text>
+  <path d="M286 473 H400" class="flow"/><text x="337" y="455" text-anchor="middle" class="label">input + credential</text>
+
+  <rect x="575" y="75" width="670" height="595" class="zone" fill="#eef8f1" stroke="#78a287"/>
+  <text x="600" y="110" class="head">Trusted application and data zone</text>
+  <rect x="625" y="185" width="220" height="72" class="node"/><text x="735" y="216" text-anchor="middle">Go HTTP API</text><text x="735" y="238" text-anchor="middle" class="small">Validate request</text>
+  <rect x="925" y="165" width="250" height="72" class="node"/><text x="1050" y="196" text-anchor="middle">Authentication / session</text><text x="1050" y="218" text-anchor="middle" class="small">Validate identity</text>
+  <rect x="925" y="285" width="250" height="88" class="node" fill="#fff5dd"/><text x="1050" y="317" text-anchor="middle">RBAC + relationship check</text><text x="1050" y="341" text-anchor="middle" class="small">Role + active child link</text><text x="1050" y="360" text-anchor="middle" class="small">+ diary visibility</text>
+  <rect x="625" y="405" width="220" height="72" class="node"/><text x="735" y="436" text-anchor="middle">Application services</text><text x="735" y="458" text-anchor="middle" class="small">Profile / session / diary</text>
+  <ellipse cx="1015" cy="530" rx="125" ry="44" class="data"/><text x="1015" y="525" text-anchor="middle">PostgreSQL</text><text x="1015" y="547" text-anchor="middle" class="small">profiles, links, diary</text>
+  <ellipse cx="1015" cy="620" rx="125" ry="35" class="data"/><text x="1015" y="625" text-anchor="middle">Audit events</text>
+  <path d="M508 473 H625" class="flow"/><path d="M845 221 H925" class="flow"/><path d="M1050 237 V285" class="flow"/>
+  <path d="M925 329 H850 V441 H845" class="flow"/><text x="883" y="314" text-anchor="middle" class="label">allow</text>
+  <path d="M1050 373 V590" class="flow"/><text x="1095" y="481" class="label">deny / decision</text>
+  <path d="M845 441 H900 V510" class="flow"/><text x="875" y="468" text-anchor="middle" class="label">minimum query</text>
+  <path d="M845 455 H870 V620 H890" class="flow"/><text x="874" y="605" text-anchor="middle" class="label">read / write</text>
+  <path d="M625 441 H560 V473 H508" class="flow"/><text x="580" y="458" text-anchor="middle" class="label">authorized response</text>
+  <text x="600" y="646" class="small">Enforcement is server-side; the browser only presents the interface.</text>
+</svg>

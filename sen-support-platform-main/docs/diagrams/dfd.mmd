@@ -1,0 +1,29 @@
+flowchart LR
+  subgraph U[Untrusted zone: user device]
+    G[Guest]
+    P[Parent or guardian]
+    S[Assigned specialist]
+    B[React browser client]
+  end
+  subgraph T[Transport boundary: HTTPS]
+    API[Go HTTP API]
+  end
+  subgraph Z[Trusted application and data zone]
+    AUTH[Authentication and session service]
+    AUTHZ[RBAC and child relationship checks]
+    APP[Profile, session and diary services]
+    DB[(PostgreSQL: profiles, assignments, diary)]
+    AUD[(Append-only audit events)]
+  end
+  G -->|public pages, register/login| B
+  P -->|authenticated actions| B
+  S -->|authenticated actions| B
+  B -->|untrusted input + access credential| API
+  API --> AUTH
+  AUTH --> AUTHZ
+  AUTHZ -->|allow only role + active relationship + visibility| APP
+  AUTHZ -->|deny decision| AUD
+  APP -->|minimum necessary query| DB
+  APP -->|read/write/export event| AUD
+  DB -->|authorized response| APP
+  APP --> API --> B
